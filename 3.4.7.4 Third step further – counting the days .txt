@@ -1,0 +1,141 @@
+
+Objectives
+
+Improve the student's skills in:
+
+    building a set of cooperating functions.
+
+Scenario
+
+Now you're ready to take on the next, more ambitious challenge.
+
+We need a function which:
+
+    is called "daysBetween";
+    accepts two arguments of type Date – the first represents the "since" date, while the second represents the "till" date;
+    returns an int value, being the number of days passed between both dates;
+    returns -1 if the "till" date is earlier than the "since" date;
+    should be mute.
+
+As usual, we've provided a skeleton of code and some test data. You provide the rest of the code and do the tests – that's the deal.
+
+Example input
+1901 1 1 2016 1 1
+
+Example output
+42003
+
+Example input
+2001 12 30 2016 12 31
+
+Example output
+5480
+
+Example input
+1999 1 31 1999 12 1
+
+Example output
+304
+
+Example input
+1999 1 2 1999 1 11
+
+Example output
+9
+
+Example input
+1999 2 2 1999 1 11
+
+Example output
+-1
+===================================================================================
+
+#include <iostream>
+using namespace std;
+int month[]={31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int month2[]={31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+struct Date {
+int year;
+int month;
+int day;
+};
+bool isLeap(int year) {
+ // The code you've inserted already
+  if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
+    return true;
+  else
+    return false;
+}
+int monthLength(int year, int month) {
+// The code you've inserted already
+  switch(month)
+  {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:return 31;
+    break;
+    case 4:
+    case 6:
+    case 9:
+    case 11:return 30;
+    break;
+    case 2:
+    if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
+      return 29;
+    else return 28;
+  }
+  return 0;
+}
+int dayOfYear(Date date) {
+ // Insert your code here
+  int liczba_dni;
+  liczba_dni=date.day;
+  if(date.month<=1)
+  liczba_dni=liczba_dni;
+  else //if (date.day>month[0])
+  {
+    if (!isLeap(date.year))
+    {
+      for(int i=0; i<date.month-1; i++)
+      liczba_dni+=month[i];
+    }
+    else //if (isLeap(date.year))
+    {
+      for(int i=0; i<date.month-1; i++)
+      liczba_dni+=month2[i];
+    }
+  }
+  return liczba_dni;
+}
+int daysBetween(Date d1, Date d2) 
+{
+// Insert you code here
+  int ile_dni=0;
+  int reszta = dayOfYear(d2);
+  int przedrostek = dayOfYear(d1);
+  if (przedrostek>=reszta && d1.year>=d2.year)
+    return -1;
+  else
+  {
+    for(int i=d1.year; i<d2.year; i++)
+      if(isLeap(i))
+        ile_dni+=366;
+      else
+        ile_dni+=365;
+  }
+  ile_dni=ile_dni+reszta-przedrostek;
+  return ile_dni;
+}
+int main(void) {
+Date since,to;
+cout << "Enter first date (y m d): ";
+cin >> since.year >> since.month >> since.day;
+cout << "Enter second date (y m d): ";
+cin >> to.year >> to.month >> to.day;
+cout << daysBetween(since,to) << endl;
+return 0;
+}

@@ -1,0 +1,123 @@
+
+Objectives
+
+Improve the student's skills in:
+
+    building a set of cooperating functions;
+    using structured types.
+
+Scenario
+
+Let's add another powerful tool to our calendar toolkit.
+
+Now write a function which:
+
+    is named "dayOfYear"
+    accepts one argument of type Date – it's a structure similar to the one you were using before;
+    returns an int value, being the number of the day within a certain year (assuming that 1st January is the first day of every year);
+    should be mute.
+
+A skeleton of the code is here for you, as well as an example of input and output.
+
+Example input
+2016 3 1
+
+Example output
+61
+
+Example input
+2015 3 1
+
+Example output
+60
+
+Example input
+2016 12 30
+
+Example output
+365
+
+Example input
+2015 12 31
+
+Example output
+365
+==========================================================================================
+
+#include <iostream>
+
+using namespace std;
+int month[]={31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int month2[]={31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+struct Date {
+	int year;
+	int month;
+	int day;
+}d;
+
+bool isLeap(int year) { 
+	// The code you've inserted already
+    if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
+  return true;
+  else
+  return false;
+}
+
+int monthLength(int year, int month) {
+	// The code you've inserted already
+  switch(month)
+  {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:return 31;
+    break;
+
+    case 4:
+    case 6:
+    case 9:
+    case 11:return 30;
+    break;
+    
+    case 2:
+    if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
+      return 29;
+    else return 28;
+  }     
+  return 0;
+}
+
+int dayOfYear(Date date) {
+
+	// Insert your code here
+  int liczba_dni;
+  liczba_dni=date.day;
+  if(date.month<=1)
+    liczba_dni=liczba_dni;
+  else //if (date.day>month[0])
+  {
+    if (isLeap(date.year))
+    {
+      for(int i=0; i<date.month-1; i++)
+      liczba_dni+=month2[i];
+    }
+    else //if (isLeap(date.year))
+    {
+      for(int i=0; i<date.month-1; i++)
+      liczba_dni+=month[i];
+    }      
+  } 
+  return liczba_dni;
+}
+
+int main(void) {
+
+	Date d;
+	cout << "Enter year, month, day: ";
+	cin >> d.year >> d.month >> d.day;
+	cout << "Jest to: "<<dayOfYear(d) <<" dzień roku"<< endl;
+	return 0;
+}

@@ -1,0 +1,238 @@
+
+Objectives
+
+Familiarize the student with:
+
+    implementing data structures in C++;
+    traversing data structures;
+    accessing data stored in data structures.
+
+Scenario
+
+For the last part of adding, removing and accessing the data in our list, we'll provide you with a way to do all of these actions by indexing the elements in the list.
+
+To enable this, we'll add three new methods to the List class:
+
+    at(int index) which will return the value of the element with index [index];
+    insert_at(int index, int value) which will insert the value at the desired index;
+    remove_at(int index) which will remove the value at the desired index (without returning it).
+
+list[0] == 1
+list[1] == 2
+list[2] == 3
+list[3] == 4
+
+list[0] == 1
+list[1] == 2
+list[2] == 4
+
+list[0] == 1
+list[1] == 6
+list[2] == 2
+list[3] == 3
+=======================================================================================================
+
+#include <iostream>
+
+using namespace std;
+
+class Node
+{
+public:
+  Node(int val);
+  int value;
+  Node* next;
+};
+Node::Node(int val)
+{
+  value=val;
+}
+
+class List
+{
+public:
+  List();
+  void push_front(int value);
+  void pop_front(int &value);
+  void push_back(int value);
+  void pop_back(int &value);
+  int  at(int index);
+  void insert_at(int index, int value);
+  void remove_at(int index);// which will
+  int size();
+private:
+  // other members you may have used
+  Node* head;
+  Node* tail;
+  int s;
+};
+List::List()
+{
+  head=NULL;
+  tail=NULL;
+  s=0;
+}
+void List::push_front(int value)
+{
+  Node *new_head = new Node(value);
+  new_head->next = head;
+  head = new_head;
+  s++;
+}
+void List::pop_front(int &value)
+{
+  if(head==NULL) cout<<"Nie można usunsc - stos pusty!\n";
+
+  else
+  {
+    Node *old_head;
+    old_head = head;
+    head = head->next;
+    delete old_head;
+    s--;
+  }
+}
+void List::push_back(int value)
+{
+  Node *new_tail = new Node(value);
+  new_tail->next = NULL;
+  if(head==NULL) head = new_tail;
+  else
+  {
+    Node *temp = head;
+    while(temp->next!=NULL)
+    {
+      temp = temp->next;
+    }
+    temp->next = new_tail;
+  }
+  s++;
+}
+void List::pop_back(int &value)
+{
+  Node *ptr, *temp;
+  if(head==NULL) cout<<"Nie można usunsc - stos pusty!\n";
+
+  else if(head->next==NULL)
+  {
+    ptr = head;
+    head = NULL;
+    delete ptr;
+    s--;
+  }
+  else
+  {
+    ptr = head;
+    while(ptr->next!=NULL)
+    {
+      temp = ptr;
+      ptr = ptr->next;
+    }
+    temp->next = NULL;
+    delete ptr;
+    s--;
+  }
+}
+//////////MIEJSCE NA NOWE FUNKCJE//////////
+int List::at(int index)
+{
+  Node *temp = head;
+  for(int i=0; i<index; i++)
+  {
+    temp = temp->next;
+  }
+  //cout<<"Next: "<<temp->next<<endl;
+  return temp->value;
+}
+void List::remove_at(int index)
+{
+    Node *ptr, *temp, *temp2;
+    if(head==NULL) cout<<"Nie można usunsc - stos pusty!\n";
+
+    else if(head->next==NULL)
+    {
+        ptr = head;
+        head = NULL;
+        delete ptr;
+        s--;
+    }
+    else
+    {
+        temp = head;
+        ptr = head->next;
+        for(int i=0; i<index; i++)
+        {
+            temp2 = temp;
+            temp = temp->next;
+            ptr = ptr->next;
+        }
+        temp2->next = ptr;
+        delete temp;
+        s--;
+    }
+}
+void List::insert_at(int index, int value)
+{
+    if(index>=0 && index<=size())
+    {
+        Node *new_node = new Node(value);
+        new_node->next = NULL;
+        if(head==NULL) head = new_node;
+    else if(index==0)//(head->next==NULL)
+    {
+    new_node->next = head;
+    head = new_node;
+    }
+    else
+    {
+    Node *temp = head;
+    Node *temp2;
+    for(int i=0; i<index; i++)
+            {
+                temp2 = temp;
+                temp = temp->next;
+            }
+            temp2->next = new_node;
+            new_node->next = temp;
+        }
+        s++;
+    }
+    else cout<<"Niepoprawny index!"<<endl;
+}
+///////////////////////////////////////////
+int List::size()
+{
+  return s;
+}
+// ...
+void printList(List &list)
+{
+  for (int i = 0; i < list.size(); i++)
+  {
+    cout<<"list["<<i<<"] == "<<list.at(i)<<endl;
+  }
+}
+
+int main()
+{
+  List list;
+  //
+  list.push_back(1);
+  list.push_back(2);
+  list.push_back(3);
+  list.push_back(4);
+  cout<<"size:"<<list.size()<<endl;
+  printList(list);
+  cout << endl;
+ 
+  list.remove_at(2);
+  printList(list);
+  cout<<"size:"<<list.size()<<endl;
+  cout << endl;
+ 
+  list.insert_at(1, 6);
+  printList(list);
+ 
+  return 0;
+}
+

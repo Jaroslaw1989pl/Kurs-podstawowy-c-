@@ -1,0 +1,88 @@
+Objectives
+
+Familiarize the student with:
+
+    string manipulation;
+    accessing single characters.
+
+Scenario
+
+A pangram is a sentence that uses every letter of the alphabet at least once. The most popular English pangram is "The quick brown fox jumps over the lazy dog." It contains 35 letters and each letter is used at least once. Write code to check whether a given string is a pangram or not. Try to write the shortest code possible. You can use the string class and arrays. Remember not to count spaces and other special characters. At the end of this program you should print how many times each letter has been used.
+
+Example input
+The quick brown fox jumps over the lazy dog
+
+Example output
+Pangram a-1 b-1 c-1 d-1 e-3 f-1 g-1 h-2 i-1 j-1 k-1 l-1 m-1 n-1 o-4 p-1 q-1 r-2 s-1 t-2 u-2 w-1 v-1 x-1 y-1 z-1
+
+
+Example input
+quick brown fox jumps over lazy dog
+
+Example output
+Not pangram a-1 b-1 c-1 d-1 e-1 f-1 g-1 h-0 i-1 j-1 k-1 l-1 m-1 n-1 o-4 p-1 q-1 r-2 s-1 t-0 u-2 w-1 v-1 x-1 y-1 z-1
+============================================================================================
+
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+string alfabet="abcdefghijklmnopqrstuvwxyz";
+string zdanie;
+char szukaj = ' ';
+int dl_alf;
+int dl_zda;
+int suma=0;
+int ile[26];
+bool jest=false;
+int main()
+{
+  cout<<"Podaj zdanie: ";
+  getline(cin, zdanie);
+  transform(zdanie.begin(), zdanie.end(), zdanie.begin(), ::tolower);//zmienia wszystki liter na male
+  dl_zda = zdanie.length();
+  for(int i=0; i<=dl_zda; i++)
+  {
+    size_t pozycja=zdanie.find(szukaj); //szuka spacji
+    if(pozycja!=string::npos)
+    {
+      zdanie.erase(pozycja,1);//usuwa spacje
+    }
+  }
+  dl_alf = alfabet.length();
+  cout<<"dlugosc alfabetu: "<<dl_alf<<endl;
+  dl_zda = zdanie.length();
+  cout<<zdanie<<endl;
+  cout<<"dlugosc zdania: "<<dl_zda<<endl;
+    for(int j=0; j<dl_zda; j++)
+    {
+      size_t litera=zdanie.find(alfabet[j]); //szuka znaku
+      if(litera!=string::npos )
+      {
+        suma+=1;
+        //zdanie.erase(litera,1);
+        for(int i=0; i<=dl_zda; i++)
+        {
+          size_t litera=zdanie.find(alfabet[j]); //szuka
+          if(litera!=string::npos)
+          {
+            ile[j]++;
+            zdanie.erase(litera,1);//usuwa
+          }
+        }
+      }
+      else suma=suma;
+    }
+  cout<<suma<<endl;
+  if(suma==26){
+    cout<<"Is panagram ";
+    for(int i=0; i<dl_alf; i++)
+    cout<<alfabet[i]<<"-"<<ile[i]<<", ";
+  }
+  else if(suma!=26){
+    cout<<"Is NOT panagram";
+    for(int i=0; i<dl_alf; i++)
+    cout<<alfabet[i]<<"-"<<ile[i]<<", ";
+  }
+  return 0;
+}

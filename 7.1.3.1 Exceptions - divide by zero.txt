@@ -1,0 +1,43 @@
+
+Objectives
+
+Familiarize the student with:
+
+    identifying situations when exceptions are thrown;
+    adding code to handle exceptions.
+
+Scenario
+
+Insert a try-catch block into this program to solve potential problems with arithmetic operations. Remember to inform the user of any exceptions in simple words.
+
+Example input
+4 2
+
+Example output
+2
+
+Example input
+4 0
+
+Example output
+Your input is not valid, you can't divide by zero.
+====================================================================================
+
+#include <iostream>
+using namespace std;
+int main(void) {
+	int a = 0, b = 0, c = 0;
+	cin >> a;
+	cin >> b;
+  try{
+    if(b==0) throw "Your input is not valid, you can't divide by zero.";
+    c = a / b;
+  }
+	catch(const char* e)
+  {
+    cout << e << endl;
+    return 0; 
+  }
+	cout << c << endl;
+	return 0;
+}

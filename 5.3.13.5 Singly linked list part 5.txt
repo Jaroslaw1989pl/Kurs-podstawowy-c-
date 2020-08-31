@@ -1,0 +1,169 @@
+
+Objectives
+
+Familiarize the student with:
+
+    implementing data structures in C++;
+    traversing data structures;
+    keeping data structures consistent at all times.
+
+Scenario
+
+To make the interface somewhat symmetrical, we should add a method for removing the last element of the list.
+
+Unfortunately, there's no simple trick to avoid traversing the list.
+
+The tail pointer tells us which element we'll be removing, but to remove it we must modify the previous element, which we need to find, starting at the head.
+
+Add the implementation of the pop_back method to List.
+
+1
+2
+3
+4
+====================================================================================
+
+#include <iostream>
+
+using namespace std;
+
+class Node
+{
+public:
+  Node(int val);
+  int value;
+  Node* next;
+};
+
+Node::Node(int val)
+{
+  value=val;
+}
+
+class List
+{
+public:
+  List();
+  ~List();
+  void push_front(int value);
+  void pop_front();
+  void push_back(int value);
+  void pop_back();
+  int size();
+  int getHeadValue()
+  {
+    return head->value;
+  }
+  int getTailValue()
+  {
+    return tail->value;
+  }
+private:
+  // other members you may have used
+  Node* head;
+  Node* tail;
+  int s;
+};
+
+List::List(): head(nullptr), tail(nullptr)
+{
+  head=NULL;
+  s=0;
+}
+List::~List()
+{
+}
+void List::push_front(int value)
+{
+  Node *new_head = new Node(value);
+  new_head->next = head;
+  head = new_head;
+  s++;
+}
+void List::pop_front()
+{
+  if(head!=NULL)
+  {
+    Node *old_head;
+    old_head = head;
+    cout<<"Value:"<<old_head->value<<endl;
+    head = head->next;
+    delete old_head;
+    s--;   
+  }
+  else cout<<"Nie można usunąć - stos pusty\n";
+
+}
+void List::push_back(int value)
+{
+  Node *new_tail = new Node(value);
+  new_tail->next = NULL;
+  if(head==NULL) head=new_tail;  
+  else
+  {
+    Node *temp = head;
+    while(temp->next!=NULL)
+    {
+      temp = temp->next;
+    }
+    temp->next = new_tail;
+  }
+  s++;
+}
+void List::pop_back()
+{
+  // implement me!
+  Node *old_tail, *temp;
+  if(head==NULL)         //Pusta lista
+  {
+    cout<<"Nie można usunąć - stos pusty\n";
+  }
+  else if(head->next==NULL) //Jeden element na liście
+  {
+    old_tail = head;
+    cout<<"Value:"<<old_tail->value<<endl;
+    head = NULL;
+    delete old_tail;
+    s--;    
+  }
+  else               //Wiecej niż jeden element na liscie
+  {
+    old_tail = head;
+    while(old_tail->next!=NULL)
+    {
+      temp = old_tail;
+      old_tail = old_tail->next;
+    }
+    temp->next = NULL;
+    cout<<"Value:"<<old_tail->value<<endl;
+    delete old_tail;
+    s--;   
+  }
+}
+int List::size()
+{
+  return s;
+}
+
+// ...
+
+int main()
+{
+  List list;
+  //
+  list.push_front(1);
+  list.push_front(2);
+  list.push_front(3);
+  list.push_front(4);
+
+  cout<<"Size:"<<list.size()<<endl;
+
+  while (list.size()>0)
+  {
+    list.pop_back();
+  }
+
+  cout<<"Size:"<<list.size()<<endl;
+
+  return 0;
+}

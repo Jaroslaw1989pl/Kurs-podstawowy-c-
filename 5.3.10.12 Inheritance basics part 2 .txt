@@ -1,0 +1,157 @@
+
+Objectives
+
+Familiarize the student with:
+
+    inheritance syntax and operation;
+    sharing functionality between objects using inheritance.
+
+Scenario
+
+Let's continue with our farm example from the previous lab.
+
+Create classes representing cows, sheep and horses:
+
+    a sheep will consume about 1.1 liters of water per day per 10 kg of weight;
+    a horse will consume about 6.8 liters of water per day per 100 kg of weight;
+    a cow will consume about 8.6 liters of water per day per 100 kg of weight.
+
+Your program should read lines of text in the following form: "[animal] [weigth]".
+
+When your program encounters an empty line, it should print the total water consumption and exit.
+
+cow 500
+sheep 80
+horse 400
+
+79
+================================================================================================
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+class Animal;
+class FarmAnimal{
+public:
+  FarmAnimal(double w_c=0);
+  double getWaterConsumption();
+  double setWaterConsumption(double x);
+  // ...
+private:
+  double water_consumption;
+};
+FarmAnimal::FarmAnimal(double w_c)
+{
+  water_consumption = w_c;
+}
+double FarmAnimal::setWaterConsumption(double x)
+{
+  return water_consumption=x;
+}
+double FarmAnimal::getWaterConsumption()
+{
+  return water_consumption;
+}
+////////////////////////////////////////////////////////////////
+class Animal: public FarmAnimal{
+  double weigth;
+  double water_per_kg;
+  string name;
+
+public:
+  Animal(double w_c=0, string nam="", double mass=0, double wat_kg=0);
+  string set_name(string inp);
+  string get_name();
+  double set_weigth(string inp);
+  double get_weigth();
+  double setConsumption();
+};
+Animal::Animal(double w_c, string nam, double mass, double wat_kg):FarmAnimal(w_c)
+{
+  name=nam;
+  weigth=mass;
+  water_per_kg=wat_kg;
+}
+string Animal::set_name(string inp)
+{
+  name=inp.substr(0, inp.find(' '));
+  return name;
+}
+string Animal::get_name()
+{
+  return name;
+}
+double Animal::set_weigth(string inp)
+{
+  string w=inp.substr(inp.find(' ')+1, inp.length());
+  return weigth=stod(w);
+}
+double Animal::get_weigth()
+{
+  return weigth;
+}
+double Animal::setConsumption()
+{
+  if(get_name()=="cow")
+    return setWaterConsumption(8.6/100*get_weigth());
+  else if(get_name()=="sheep")
+    return setWaterConsumption(1.1/10*get_weigth());
+  else if(get_name()=="horse")
+    return setWaterConsumption(6.8/100*get_weigth());
+  else return 0;
+}
+////////////////////////////////////////////////////////////////
+class ConsumptionAccumulator
+{
+public:
+  ConsumptionAccumulator();
+  double getTotalConsumption();
+  void addConsumption(Animal &animal);
+private:
+  double total_consumption;
+};
+ConsumptionAccumulator::ConsumptionAccumulator() :
+  total_consumption(0)
+{
+}
+double ConsumptionAccumulator::getTotalConsumption()
+{
+  return total_consumption;
+}
+void ConsumptionAccumulator::addConsumption(Animal &animal)
+{
+  total_consumption += animal.getWaterConsumption();
+}
+////////////////////////////////////////////////////////
+
+int main()
+{
+  string input;
+
+  FarmAnimal fa;
+  Animal anim;
+  ConsumptionAccumulator accumulator; 
+  // read user input
+  // create appropriate objects and add them to the accumulator
+  while(1==1)
+  {
+    getline(cin, input);
+    if(input!="")
+    {      
+      anim.set_name(input);
+      anim.set_weigth(input);
+      anim.setConsumption();
+
+      accumulator.addConsumption(anim); 
+    }
+    else if(input=="")  
+    {
+      cout<<"Całkowite zapotrzebowanie: "<<accumulator.getTotalConsumption()<<endl;
+      break;
+    } 
+  }
+  
+
+  return 0;
+}

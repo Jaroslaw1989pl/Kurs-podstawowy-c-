@@ -1,0 +1,65 @@
+
+Objectives
+
+Familiarize the student with:
+
+    modelling real-world entities with classes and objects.
+
+Scenario
+
+Now that you're a little more familiar with classes and objects, let's pretend we're working on an airline flight booking system.
+
+Our systems save an identification number, the capacity and the number of seats reserved for all flight bookings.
+
+Our first job will be to print out a status report about the percentage of capacity filled.
+
+The report should be in the form: "Flight [id] : [reserved]/[capacity] ([percentage]%) seats taken"
+
+For now, let's not limit the number of reserved seats. We'll work on that later.
+
+Example input
+100 50
+
+Example output
+Flight 1 : 50/100 (50%) seats reserved
+
+Example input
+180 200
+
+Example output
+Flight 1 : 200/180 (111%) seats reserved
+==========================================================================================
+
+#include <string>
+#include <iostream>
+using namespace std;
+class FlightBooking {
+public:
+FlightBooking(int i, int cap, int res);
+void printStatus();
+private:
+int id;
+int capacity;
+int reserved;
+};
+FlightBooking::FlightBooking(int i, int cap, int res)
+{
+// Save data to members
+id=i;
+capacity=cap;
+reserved=res;
+}
+void FlightBooking::printStatus()
+{
+// print report here
+cout<<"Flight "<<id<<": "<<reserved<<"/"<<capacity<<"("<<(reserved*100)/capacity<<"%) seats reserved";
+}
+int main() {
+int reserved = 0,
+     capacity = 0;
+cout << "Provide flight capacity: "; cin >> capacity;
+cout << "Provide number of reserved seats: "; cin >> reserved;
+FlightBooking booking(1, capacity, reserved);
+booking.printStatus();
+return 0;
+}

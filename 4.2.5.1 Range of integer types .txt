@@ -1,0 +1,48 @@
+Objectives
+
+Familiarize the student with:
+
+    the limitations of C++ standard integer types.
+
+Scenario
+
+Write a program that, given a number N, will calculate the sum of all numbers in the range [1..N].
+
+Your program must give correct results for N up to 100,000.
+
+Example input
+5
+
+Example output
+15
+
+
+Example input
+124
+
+Example output
+7750
+
+
+Example input
+100000
+
+Example output
+5000050000
+=========================================================================================
+
+#include<iostream>
+using namespace std;
+int main()
+{
+  	int N;
+	long int suma=0;  cout<<"podaj zakres liczb do zsumowania (N): "; cin>>N;
+  	for(int i=1; i<=N; i++)
+	{
+		suma+=i;
+	} 
+  	//wypisanie wartosci pola *x
+  	cout<<"Suma pierwszych "<<N<<" liczb to: "<<suma;
+    
+  return 0;
+}

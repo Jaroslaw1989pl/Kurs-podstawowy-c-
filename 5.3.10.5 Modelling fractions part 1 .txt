@@ -1,0 +1,155 @@
+Objectives
+
+Familiarize the student with:
+
+    modelling real-world entities with classes and objects;
+    providing meaningful and helpful representations of objects.
+
+Scenario
+
+We've already seen that floating-point numbers have their quirks in C++.
+
+Let's try to write our own class representing non-integer numbers, namely fractions!
+
+Our class shall, for now, provide the following functionalities:
+
+    the class will provide a textual representation;
+    the textual representation willdisplay whole parts correctly, i.e. 7/4 will be displayed as "1 3/4";
+    the textual representation will display signs correctly, i.e. -3/4 and 3/-4 will be displayed as "-3/4";
+    the class willprovide a floating-point representation;
+    the textual representation will display whole parts correctly, i.e. 7/4 will be displayed as "1 3/4";
+    We'll assume the denominator will not be set to 0.
+
+Your program should allow input in the form "[numerator] / [denominator]".
+
+Example input
+3 / 4
+
+Example output
+3/4 is 0.75 in decimal
+
+
+Example input
+7 / -4
+
+Example output
+-1 3/4 is -1.75 in decimal
+
+
+Example input
+8 / 4
+
+Example output
+2 is 2.0 in decimal
+
+
+Example input
+-6 / 8
+
+Example output
+-6/8 is -0.75 in decimal
+===================================================
+
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include<sstream>
+
+using namespace std;
+
+class Fraction{
+public:
+  Fraction(int numerator=1, int denominator=1);
+  string toString(int num, int den);
+  double toDouble(int num, int den);
+  int setNum(string);
+  int setDen(string);
+private:
+  int numerator;
+  int denominator;
+};
+// implement Fraction methods
+Fraction::Fraction(int num, int den)
+{
+  numerator=num;
+  denominator=den;
+}
+int Fraction::setNum(string inp)
+{
+  size_t s1 = inp.find(' ');
+  string n = inp.substr(0, s1);
+  return numerator = atoi(n.c_str());
+}
+int Fraction::setDen(string inp)
+{
+  size_t s2 = inp.rfind(' ');
+  string d = inp.substr(s2+1, inp.length());
+  return denominator = atoi(d.c_str());
+}
+string Fraction::toString(int num, int den)
+{
+  int dec=num/den; //Zamiana jednostek na napis
+  stringstream ssd;
+  ssd<<dec;
+  string d;
+  ssd>>d;
+
+  int rem=num%den; //Zamiana licznika na napis
+  if((num<0 || den<0) && dec!=0)
+    rem=abs(rem);
+  else if(abs(num)<abs(den) && den<0)
+    rem=rem*-1;
+  stringstream ssr;
+  ssr<<rem;
+  string r;
+  ssr>>r;
+
+  den=abs(den);
+  stringstream ss3; ////Zamiana mianownika na napis
+  ss3<<den;
+  string de;
+  ss3>>de;
+
+  cout<<"num: "<<num<<endl;
+  cout<<"rem: "<<rem<<endl;
+  cout<<"den: "<<den<<endl;
+
+  if((num>0 || den>0) && dec==0)
+    return r+"/"+de;
+
+  else if(num%den==0)
+    return d;
+
+  else
+    return d+" "+r+"/"+de;
+
+  return 0;
+}
+double Fraction::toDouble(int num, int den)
+{
+  double n=num;
+  double d=n/den;
+  cout<<showpoint;//wstawia przecinek do liczby całkowitej np. 8 to 8.00
+  cout.precision(3);
+  return d;
+}
+
+
+int main(void)
+{
+  int num, den;
+  string input = "";
+  getline(cin, input);
+
+  // parse input and get numerator and denominator
+
+  Fraction fraction(num, den);
+  num=fraction.setNum(input);
+  den=fraction.setDen(input);
+  if(den==0)
+    cout<<"Do not allowed action\n";
+  else
+    cout<<fraction.toString(num, den)<< " is "<<fraction.toDouble(num, den)<<" in decimal" << endl;
+
+  return 0;
+}

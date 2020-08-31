@@ -1,0 +1,86 @@
+
+Objectives
+
+Improve the student's skills in:
+
+    using and declaring structured data types and variables;
+    formatting output data.
+
+Scenario
+
+We hope that your previous program enables you to travel in time smoothly and accurately. Now we want you to modify it a bit:
+
+    declare two structure variables – one for the start time, another for the end time;
+    Ask your user for both times – be sure that the end time denotes a later time of day than the start time (we assume that both times fall on the same day);
+    evaluate and output the duration of time (in hours and minutes) between both times.
+
+Note: we're still using a 24-hour clock!
+
+Test your code using the data we've provided.
+
+Example input
+0 1 23 59
+
+Example output
+23:58
+
+Example input
+12 58 13 3
+
+Example output
+0:5
+
+Example input
+8 2 17 43
+
+Example output
+9:41
+========================================================================================
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+int s, e, d, th, tm, day;
+struct time {
+int godz;
+int min;
+}start,end;
+
+cout<<"Podaj godzinę rozpoczecia (0-23): "; cin>>start.godz;
+if(0<=start.godz && start.godz<=23)
+{
+cout<<"Podaj minutę rozpoczecia (0-59): "; cin>>start.min;
+if(0<=start.min && start.min<=59)
+{
+cout<<"Podaj godzinę zakończenia (0-23): "; cin>>end.godz;
+if(0<=start.godz && start.godz<=23)
+{
+cout<<"Podaj minutę zakończenia (0-59): "; cin>>end.min;
+if(0<=start.min && start.min<=59)
+{
+s=start.godz*60+start.min;
+e=end.godz*60+end.min;
+if(e>s)
+{
+d=e-s;
+th=d/60;
+tm=d%60;
+cout<<th<<":"<<tm;
+}
+if(e<s)
+{
+day=24*60;
+d=day-s+e;
+th=d/60;
+tm=d%60;
+cout<<th<<":"<<tm;
+}
+}
+}
+}
+}
+
+return 0;
+}

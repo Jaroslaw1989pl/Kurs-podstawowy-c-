@@ -1,0 +1,230 @@
+
+Objectives
+
+Familiarize the student with:
+
+    modelling real-world entities with classes and objects;
+    limiting acceptable input range;
+    managing multiple objects.
+
+Scenario
+
+After working on our flight-booking system, you should have a grasp of basic object-oriented programming.
+
+Now let's revisit the material and create a similar system from scratch!
+
+Build a program that will manage gym member subscriptions.
+
+The data we're going to store about each member is going to be:
+
+    their user ID;
+    their name;
+    for how many months their membership is valid.
+
+Our program should allow the following commands:
+
+    the command "create [id] [name]" will try to create a new member with ID [id], name [name] and 0 months of subscription;
+    the command "delete [id]" will try to remove the member with ID [id];
+    the command "extend [id] [n]" will try to extend the membership number of months of the member by [n];
+    the command "cancel [id]" will try to set the number of months of subscription to 0 of the member with the ID [id];
+    if an operation fails for any reason, the program will issue the message "Cannot perform this operation". You can add a more helpful message to identify why the operation failed;
+    the command "quit" will stop the execution of the program.
+
+For the sake of simplicity, let's limit the maximum number of members handled to ten.
+
+As a convention, we can assume that 0 is not a valid member ID, so a member with an ID of 0 may be considered as nonexistent.
+
+User prompts were omitted in the output
+
+create 7 John Doe
+create 8 Jane Doe
+extend 7 6
+extend 8 12
+cancel 8
+delete 7
+quit
+
+No members in the system
+
+Member 7 : John Doe, subscription valid for 0 months
+
+Member 7 : John Doe, subscription valid for 0 months
+Member 8 : Jane Doe, subscription valid for 0 months
+
+Member 7 : John Doe, subscription valid for 6 months
+Member 8 : Jane Doe, subscription valid for 12 months
+
+Member 7 : John Doe, subscription valid for 6 months
+Member 8 : Jane Doe, subscription valid for 0 months
+
+Member 8 : Jane Doe, subscription valid for 0 months
+================================================================================================
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Gym
+{
+  int id;
+  string name;
+  int mem_period;
+
+public:
+  static int counter;
+
+  Gym(int=0, string="", int=0);
+  ~Gym();
+  int setId(string);
+  int getId();
+  string setName(string);
+  string getName();
+  int setMemPeriod(string);
+  int getMemPeriod();
+  void printStatus();
+};
+
+int Gym::counter=0;
+
+Gym::Gym(int i, string n, int p) ////Konstruktor klay Gym///////////////
+{
+  id=i;
+  name=n;
+  mem_period=p;
+  //printStatus();
+  counter++;
+}
+
+Gym::~Gym()//////////////////////////Destruktor klay Gym///////////////
+{
+  id=0;
+  name="";
+  mem_period=0;
+}
+////////////////////////////////////////////////////////// ID
+int Gym::setId(string command)
+{
+  size_t create=command.find("create");//Dodawanie uĹĽytkownika-szukanie ID
+  if(create!=string::npos)
+  {
+    command.erase(0, 7);
+    size_t s=command.find(' ');
+    string cid=command.substr(0, s);
+    int id=atoi(cid.c_str());
+    return id;
+  }
+  return 0;  
+}
+int Gym::getId()
+{
+  return id;
+}
+///////////////////////////////////////////////////////////  NAME
+string Gym::setName(string command)
+{
+  command.erase(0, 7);
+  size_t s=command.find(' ');
+  return name=command.erase(0, s+1);;
+}
+string Gym::getName()
+{
+  return name;
+}
+/////////////////////////////////////////////////////// MEMBERSHIP PERIOD
+int Gym::setMemPeriod(string command)
+{
+  size_t ext=command.find("extend");//wydłużanie subskrybcji
+  if(ext!=string::npos)
+  {
+    size_t s=command.rfind(' ');
+    command.erase(0, s+1);
+    int sub=atoi(command.c_str());
+    return mem_period=sub;
+  }
+  size_t can=command.find("cancel");//wydłużanie subskrybcji
+  if(can!=string::npos)
+  {
+    mem_period=0;
+    return mem_period;
+  }  
+  return 0;
+}
+int Gym::getMemPeriod()
+{
+  return mem_period;
+}
+
+void Gym::printStatus()
+{
+  cout<<"Counter: "<<counter<<endl;
+  if(id==0) cout<<"No members in the system"<<endl;
+  if(id>0) cout<<"Member "<<getId()<<": "<<getName()<<", subscription valid for "<<mem_period<<" months"<<endl;
+}
+
+int main()///////////////////////////Funkcja gĹ‚Ăłwna////////////////////
+{
+  string command;
+  int user=0;
+  int us_ls=0;
+  Gym gym[10];
+  //gym[0]=Gym();
+  gym[user].printStatus();
+
+  while(command!="quit")
+  {    
+    cout<<"Take action: "; getline(cin, command);    
+
+    size_t create=command.find("create");//Dodawanie uĹĽytkownika
+    if(create!=string::npos)
+    { 
+      string u_id=command.substr(7, command.length());//przypisywanie ID do tablicy
+      size_t u_i=u_id.find(' ');
+      u_id.erase(u_i, u_id.length());
+      int u=atoi(u_id.c_str());
+      user=u;
+      gym[user]=Gym(gym[user].setId(command), gym[user].setName(command));
+      //gym[user].printStatus();
+      us_ls++;      
+    }
+
+    size_t extend=command.find("extend");//Subskrybcja
+    if(extend!=string::npos)
+    {  
+      string u_id=command.substr(7, command.length());//przypisywanie ID do tablicy
+      size_t u_i=u_id.find(' ');
+      u_id.erase(u_i, u_id.length());
+      int u=atoi(u_id.c_str());
+      user=u;    
+      gym[user].setMemPeriod(command);
+      //gym[user].printStatus();
+    }
+
+    size_t cancel=command.find("cancel");//Anulacja subskrybcji
+    if(cancel!=string::npos)
+    {      
+      size_t u_i=command.find(' ');//przypisywanie ID do tablicy
+      string u_id=command.substr(u_i+1, command.length());
+      int u=atoi(u_id.c_str());
+      user=u;      
+      gym[user].setMemPeriod(command);
+      //gym[user].printStatus();       
+    }
+
+    size_t del=command.find("delete");
+    if(del!=string::npos)
+    {
+      size_t u_i=command.find(' ');//przypisywanie ID do tablicy
+      string u_id=command.substr(u_i+1, command.length());
+      int u=atoi(u_id.c_str());
+      user=u;
+      gym[user].~Gym();
+    }
+    
+    for(int i=us_ls; i>0; i--)
+    {
+      gym[user].printStatus();
+    }  
+  }
+
+  return 0;
+}

@@ -1,0 +1,70 @@
+
+Objectives
+
+Familiarize the student with:
+
+    the basics of string and text manipulation.
+
+Scenario
+
+When editing text, it is more than common to revisit and edit some previously written sentences. When doing so, people tend to duplicate words.
+
+Write a program that will read a line of text and remove all the duplicate words in that line of text.
+
+However, two identical words separated by punctuation should not be considered duplicate.
+
+Example input
+This sentence has no duplicate words
+
+Example output
+This sentence has no duplicate words
+
+Example input
+This sentence has has only unique words
+
+Example output
+This sentence has only unique words
+
+Example input
+You should, should you be interested, look for for more information online
+
+Example output
+You should, should you be interested, look for more information online
+===================================================================================================
+
+#include<iostream>
+#include<sstream>
+#include<unordered_set>
+using namespace std;
+
+void remDuplicateWord(string str)
+{
+    // Used to split string around spaces.
+    stringstream ss(str);
+
+    // To store individual visited words
+    unordered_set<string> hash_tab;
+
+    //To store individual visited words
+    do
+    {
+        string word;
+        ss >> word;
+
+        // check if current word already exist,if not then insert
+        while (hash_tab.find(word) == hash_tab.end()) {
+            cout << word << " ";
+            hash_tab.insert(word);
+        }
+
+    } while (ss);
+}
+
+// Driver function
+int main()
+{
+    string str;
+    getline(cin, str);
+    remDuplicateWord(str);
+    return 0;
+}

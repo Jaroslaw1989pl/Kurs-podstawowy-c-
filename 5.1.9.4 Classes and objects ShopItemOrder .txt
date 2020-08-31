@@ -1,0 +1,111 @@
+
+Objectives
+
+Familiarize the student with:
+
+    defining a C++ class from scratch;
+    modelling real-world entities with classes and objects.
+
+Scenario
+
+Now that you have the basics, try to implement your own C++ class!
+
+Let's say we're building an e-commerce site and you are tasked with implementing a single-item order in a shopping cart.
+
+    Your class should be named ShopItemOrder.
+    The item order shall store the following information:
+        item name;
+        item unit price;
+        number of items ordered.
+    There will be access methods allowing to:
+        get and set all of the above information;
+        get the total price for the order;
+        print the order in a user-friendly way.
+
+You can take any approach to calculating the total price.
+============================================================================================================
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class ShopItemOrder
+{
+  // Write your code here
+  
+  public:
+  string name;
+  double price;
+  int quantity;
+
+  void set_order()
+  {
+    cout<<"Podaj nazwe produktu: "; cin>>name;
+    cout<<"Podaj ilość sztuk produktu: "; cin>>quantity;
+  }
+ 
+  double total_cost(double p, int q)
+  {
+    return p*q;
+  } 
+};
+int main() {
+  
+  ShopItemOrder ord;
+  ord.price=3.75;
+  ord.set_order();
+  cout<<"Koszt zamówienia "<<ord.quantity<<" szt."<<" produktu: "<<ord.name<<
+  " wynosi "<<ord.total_cost(ord.price, ord.quantity);
+  return 0;
+}
+
+================Z KONSTRUKTOREM===================================================================
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class ShopItemOrder
+{
+  // Write your code here
+  string name;
+  double price;
+  int quantity;
+
+  public:
+  ShopItemOrder(string, double, int);
+  void set_order(string n, double p, int q);
+  void total_cost(double p, int q);
+};
+ShopItemOrder::ShopItemOrder(string n, double p, int q)
+{
+  set_order(n, p, q);
+  total_cost(p, q);
+}
+void ShopItemOrder::set_order(string n, double p, int q)
+  {
+    name=n;
+    price=p;
+    if(q>=0)
+    quantity=q;
+    else cout<<"Niepoprawna ilość!"<<endl;
+  }
+ 
+void ShopItemOrder::total_cost(double p, int q)
+{
+  cout<<"Koszt zamówienia "<<quantity<<" szt. "<<name<<" wynosi "<<price*quantity;
+}
+
+int main() {
+  string nazwa;
+  int ilosc;
+
+  cout<<"Podaj nazwe produktu: "; cin>>nazwa;
+  cout<<"Podaj ilość sztuk produktu: "; cin>>ilosc;
+
+  ShopItemOrder ord(nazwa, 3.75, ilosc);
+  
+  //cout<<"Koszt zamówienia "<<ord.quantity<<" szt."<<" produktu: "<<ord.name<<
+  //" wynosi "<<ord.total_cost(ord.price, ord.quantity);
+  return 0;
+}

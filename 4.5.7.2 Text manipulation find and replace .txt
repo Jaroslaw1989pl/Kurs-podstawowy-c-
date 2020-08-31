@@ -1,0 +1,70 @@
+
+Objectives
+
+Familiarize the student with:
+
+    working with multiple strings to combine into a single result.
+
+Scenario
+
+A common action when editing text is to replace an expression or word with yet another expression.
+
+Write a program that will read three lines of text. In the last line read replace all occurrences of the expression in the first line with the expression in the second line.
+
+Make sure that changing an expression to a similar expression will not cause your program any problems.
+
+Example input
+John
+Mary
+John had a little lamb
+
+Example output
+Mary had a little lamb
+
+Example input
+difficult problems
+opportunities to grow
+A software engineer may encounter many difficult problems
+
+Example output
+A software engineer may encounter many opportunities to grow
+
+Example input
+Linux
+GNU Linux
+Some prefer Linux over Windows
+
+Example output
+Some prefer GNU Linux over Windows
+====================================================================================================
+
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int dl_from, dl_to, dl_sen;
+int main()
+{
+    string from;
+    getline(cin, from);
+
+    string to;
+    getline(cin, to);
+
+    string sentence;
+    getline(cin, sentence);
+
+    // change all occurrences of 'from' into 'to' in the sentence
+    dl_to=to.length();
+    dl_from=from.length();
+    dl_sen=sentence.length();
+
+    size_t poz_from=sentence.find(from);
+    if(poz_from!=string::npos)
+    {
+      sentence.replace(poz_from, dl_from, to);
+    }
+      
+    cout << sentence << "\n";
+}

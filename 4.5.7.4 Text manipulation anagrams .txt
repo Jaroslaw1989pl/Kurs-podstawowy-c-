@@ -1,0 +1,92 @@
+
+Objectives
+
+Familiarize the student with:
+
+    more advanced text analysis, processing and involved algorithms.
+
+Scenario
+
+Anagrams are words that consist of the same letters in a different order.
+
+For example, "sweat" and "waste" are anagrams, while "cat" and "dog" are not.
+
+Write a program that will read two words and decide if they are anagrams.
+
+Your program should assume lower case for all the words read.
+
+Example input
+cat dog
+
+Example output
+not anagrams
+
+Example input
+cellar recall
+
+Example output
+anagrams
+
+Example input
+antler learnt
+
+Example output
+anagrams
+================================================================================================
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+bool isAnagram(string wyraz1, string wyraz2)
+{
+  int dl_1, dl_2;
+
+  dl_1=wyraz1.length();
+  dl_2=wyraz2.length();
+
+  if(dl_1==dl_2)
+  {
+   for (int i = 0; i<wyraz1.length()-1; i++) //sortowanie bąbelkowe
+    {
+      for (int j = 0; j<wyraz2.length()-1; j++)
+      {
+        if (wyraz1[j]>wyraz1[j+1])
+        {  //swap(wyraz1[j], wyraz1[j+1]);
+          int bufor=wyraz1[j+1];
+          wyraz1[j+1]=wyraz1[j];
+          wyraz1[j]=bufor;
+        }
+        if (wyraz2[j]>wyraz2[j+1])
+        {  //swap(wyraz2[j], wyraz2[j+1]);
+          int bufor=wyraz2[j+1];
+          wyraz2[j+1]=wyraz2[j];
+          wyraz2[j]=bufor;
+        }
+      }
+    }
+  } 
+   //cout<<wyraz1<<endl;
+   //cout<<wyraz2<<endl;
+  if(wyraz1==wyraz2) 
+    return true;
+  else 
+    return false;  
+}
+
+int main ()
+{
+  string word1;
+  string word2;
+  
+  cin>>word1;
+  cin>>word2;
+
+  if(isAnagram(word1, word2))
+    cout<<"anagram";
+  else
+    cout<<"not anagram";
+  
+  return 0;
+} 

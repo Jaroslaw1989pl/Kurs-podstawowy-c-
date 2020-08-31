@@ -1,0 +1,71 @@
+Scenario
+
+Your task it to write a real, interactive, four-function calculator. Of course, you may add as many new functions as you want, but four basic operations (+ - * /) are a must. Moreover, we hope that your calculator will be smart enough not to be fooled by a division by 0. Be careful!
+
+We want your program to display a menu that looks like this one:
+
+MENU:
+0 - exit
+1 - addition
+2 - subtraction
+3 - multiplication
+4 - division
+Your choice?
+
+Next, your program should read an int value representing the chosen option and act accordingly. If the option requires the execution of further operations, your program should read two double values, perform an operation and display the result. Then, your program should display a menu and... the story repeats until the user enters 0.
+
+Hint: use a switch statement - you expected this, didn't you?
+
+Test your program carefully using a wide range of data.
+=============================================================================================
+#include <iostream>
+#include <stdio.h>//wymagana do działania funkcji exit(0);
+#include <cstdlib>//waymagana do działania funkcji czyszczącej ekran system("cls");
+using namespace std;
+
+int main()
+{
+    for(;;)
+    {
+        float x,y, n;
+        int wybor;
+        
+        cout<<"Enter first value: ";    cin>>x;
+        cout<<"Enter second value: ";   cin>>y;
+        cout<<endl;
+        cout<<"MENU"<<endl;
+        cout<<"----------------"<<endl;
+        cout<<"1 - addition"<<endl;
+        cout<<"2 - subtraction"<<endl;
+        cout<<"3 - multiplication"<<endl;
+        cout<<"4 - division"<<endl;
+        cout<<"5 - exit"<<endl;
+        
+        cout<<"Your choice?"<<endl;     cin>>wybor;
+        
+            switch(wybor)
+            {
+                case 1:
+                    cout<<"Your result:"<<x+y<<endl;    break;
+                
+                case 2:
+                    cout<<"Your result:"<<x-y<<endl;    break;
+                    
+                case 3:
+                    cout<<"Your result:"<<x*y<<endl;    break;
+                    
+                case 4:
+                    if(y==0)
+                        cout<<"Action prohibited"<<endl;
+                    else
+                        cout<<"Your result:"<<x/y<<endl; break;
+                case 5:
+                    exit(0);                             break;
+                
+                default:cout<<"That option does not exist!"<<endl;
+            }
+            getchar();getchar();
+            system("cls");
+    }
+return 0;
+}

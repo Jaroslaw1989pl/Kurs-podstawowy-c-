@@ -1,0 +1,171 @@
+
+Objectives
+
+Familiarize the student with:
+
+    using strings as function parameters;
+    using string methods to check the content of strings.
+
+Scenario
+
+Write a function to check a string parameter that contains an IP address – return the string with information about whether the address is correct or not. Here are some possible return strings:
+
+    Correct IP;
+    Too many characters in a part;
+    Too many parts;
+    Only digits and dots allowed;
+    Too big a value of a part;
+    Incorrect parts count.
+
+1.2.3.4
+255.255.255.255
+355.255.255.255
+1000.255.255.255
+ASD.255.255.255
+
+Correct IP
+Correct IP
+Too big a value of a part
+Too many characters in a part
+Only digits and dots allowed
+========================================================================================
+
+#include <iostream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
+
+string ip, ipo;
+int dl_ip; 
+
+void ile_oktetow(string ip)
+{
+  int ile_kropek=0;
+  dl_ip=ip.length(); 
+  for(int i=0; i<dl_ip; i++)
+  {
+    if(ip[i]=='.')
+    {
+      ile_kropek++;
+    }
+  }
+  if(ile_kropek>3)
+    cout<<"Za dużo oktetów"<<endl;
+  else if(ile_kropek<3)
+    cout<<"Za mało oktetów"<<endl;
+}
+
+bool liczba_znakow(string ip)
+{
+  int ile_kropek=0;
+  dl_ip=ip.length(); 
+  for(int i=0; i<dl_ip; i++)
+  {
+    if(ip[0]=='.' || ip[dl_ip-1]=='.')
+    {
+      cout<<"Za mało znaków w oktecie"<<endl;
+      i=dl_ip;
+      return true;
+    }
+    size_t dot=ip.find('.');
+    if(dot!=string::npos)
+    {     
+      //cout<<"Miejsce kropki: "<<dot<<endl;
+      ip.erase(0, dot+1);
+      //cout<<"Adres ip: "<<ip<<endl;
+      ile_kropek++;
+      //cout<<"Ile kropek: "<<ile_kropek<<endl;      
+      if(dot>3)
+      {
+        cout<<"Za dużo znaków w oktecie"<<endl;
+        i=dl_ip;
+        return true;        
+      }
+
+      dl_ip=ip.length(); 
+      if(ile_kropek==3 && dl_ip>3)
+      {
+        cout<<"Za dużo znaków w oktecie"<<endl;
+        i=dl_ip;
+        return true;
+      }        
+    }
+    size_t dots=ip.find("..");
+    if(dots!=string::npos)
+    {
+      cout<<"Za mało znaków w oktecie"<<endl;
+      i=dl_ip;
+      return true;
+    }
+    
+  }
+  return false;
+}
+
+bool cyfry_kropki(string ip)
+{
+  int znaleziony_znak=0;
+  string zakres=".0123456789";
+  dl_ip=ip.length(); 
+  int dl_zakres=zakres.length(); 
+  for(int i=0; i<dl_ip; i++)
+  {
+    for(int j=0; j<dl_zakres; j++)
+    {
+      if(ip[i]==zakres[j])
+      {
+        znaleziony_znak++;
+      }      
+    }
+  }
+  if(znaleziony_znak==dl_ip)
+    return false;
+  else
+  {
+    //cout<<dl_ip<<endl;     
+    //cout<<znaleziony_znak<<endl; 
+    cout<<"Niedozwolony znak"<<endl;
+    return true;
+  }      
+}
+bool wartosc_oktetu(string ip)
+{  
+  dl_ip=ip.length(); 
+  for(int i=0; i<dl_ip; i++)
+  {
+    size_t dot=ip.find('.');
+    if(dot!=string::npos)
+    {     
+      int l = atoi(ip.c_str());
+      //cout<<l<<endl;
+      ip.erase(0, dot+1);
+      if(l>255)
+      {
+        cout<<"Zbyt wysoka wartość oktetu"<<endl;
+        return true;
+      }          
+    }
+  }
+  int l =atoi(ip.c_str());
+  if(l>255)
+  {
+    cout<<"Zbyt wysoka wartość oktetu"<<endl;
+    return true;
+  } 
+  else return false;
+}
+int main()
+{
+  ipo=ip;
+  cout<<"Podaj adres IP: ";
+  cin>>ip;
+  ile_oktetow(ip);
+  if(!liczba_znakow(ip))
+  if(!cyfry_kropki(ip))
+  if(!wartosc_oktetu(ip))
+    cout<<ip;
+  
+
+return 0;
+}

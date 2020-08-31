@@ -1,0 +1,142 @@
+
+Objectives
+
+Familiarize the student with:
+
+    implementing data structures in C++;
+    dynamic allocation of C++ objects.
+
+Scenario
+
+There are some classic data structures in computer science. One example of this that you've seen in the lectures is called the stack.
+
+In the next few exercises, we'll build yet another classic data structure, the linked list.
+
+To be exact, we'll be building the singly linked list.
+
+The building block of a singly linked list is a node, which consists of two parts:
+
+    a value;
+    a link to the next node in the list, also known as the "next" pointer.
+
+The beginning of a list is called the head and it's a pointer to the first node in the list.
+
+When the list is empty, the head usually points to nothing, i.e. the nullptr.
+
+Similarly, if a node is the last node in the list, the "next" pointer of that node will point to nullptr.
+
+Let's build a list of integers.
+
+Our initial implementation of the list should have two methods:
+
+    push_front, which will add a value to the front of the list;
+    pop_front, which will return and remove the value.
+
+4
+3
+2
+1
+==============================================================================================================
+
+#include <iostream>
+
+using namespace std;
+
+class Node
+{
+public:
+  Node(int val);
+  ~Node();
+  int value;
+  Node* next;
+};
+Node::Node(int val) : value(val), next(nullptr)
+{
+  value=val;
+  //cout<<"+Node\n";
+}
+Node::~Node()
+{
+  //cout<<"-Node\n";
+}
+
+class List
+{
+public:
+  List();
+  ~List();
+  void push_front(int value);
+  bool pop_front(int &value);
+  int getValue()
+  {
+    return head->value;
+  }
+  int size;
+private:
+  Node* head;
+};
+
+List::List() : head(nullptr)
+{
+  head=NULL;
+}
+List::~List()
+{
+  if(head==NULL)
+    cout<<"Stos jest pusty - brak danych do usuniecia\n";
+  else
+    cout<<"Usuwanie stosu\n";
+}
+void List::push_front(int val)
+{
+  Node* new_head = new Node(val);
+  new_head->next = head;
+  head=new_head;
+  ++size;
+  //cout<<"Head:"<<new_head->value<<" Next:"<<new_head->next<<endl;
+}
+
+bool List::pop_front(int &val)
+{
+  // implement the pop
+  // don't forget to delete the popped node!
+  // and fix the return value
+  if(head!=NULL)
+  {
+    //cout<<"Head:"<<head->next<<" Value:"<<head->value<<endl; 
+    --size;
+    Node *old_head;
+    old_head = head;
+    head = head->next;
+    delete old_head;   
+    return true;
+   
+  }
+  else
+  {
+    cout<<"Stos pusty\n";
+    return false;
+  }
+ 
+}
+
+int main()
+{
+  List *list = new List();
+ 
+  //
+  list->push_front(1);
+  list->push_front(2);
+  list->push_front(3);
+  list->push_front(4); 
+ 
+  int value = list->getValue();
+  while (list->size>0)
+  {
+    value = list->getValue();
+    list->pop_front(value);
+    cout << value << endl;   
+  }
+
+  return 0;
+}

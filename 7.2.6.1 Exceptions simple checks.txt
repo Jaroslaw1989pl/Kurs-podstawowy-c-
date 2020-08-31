@@ -1,0 +1,107 @@
+
+Objectives
+
+Familiarize the student with:
+
+    situations when exceptions are thrown;
+    throwing exceptions;
+    handling exceptions.
+
+Scenario
+
+Write a very simple class to hold one value and its boundaries (limits of the value in integer numbers), add one method to add a value to the one held in the instance of class, and one method to subtract a value from the one held in the object. In both methods, throw an exception when a value exceeds the limits. In the main function create two objects and test them with different scenarios. Print the values held at the end of the program. Add adequate try-catch blocks and an appropriate message.
+
+5 0 10
+9 0 100
+15
+15
+90
+
+Value could exceed limit.
+Value could exceed limit.
+5
+24
+=====================================================================================================
+
+#include <iostream>
+using namespace std;
+
+class Number
+{
+private:
+  int number;
+  int lower_limit;
+  int upper_limit;
+  int extra_value;
+public:
+  Number();
+  //~Number();
+  int getnumber();
+  int getlower_limit();
+  int getupper_limit();
+  void addValue();
+  void substractValue();
+};
+  Number::Number()
+  {
+    cout<<"Podaj numer: "; cin>>number;
+    
+    do
+    {
+      cout<<"Podaj dolny limit: ";cin>>lower_limit;
+      if(lower_limit>number) 
+        cout<<"!!!dolny limit nie moze być wiekszy niz "<<number<<endl;
+    }while(lower_limit>number);
+    
+    do
+    {
+      cout<<"Podaj gorny limit: ";cin>>upper_limit;
+      if(upper_limit<number) 
+        cout<<"!!!górny limit nie moze być mniejszy niz "<<number<<endl;
+    }while(upper_limit<number);
+    
+  }
+  //~Number()
+  int Number::getnumber(){
+    return number;
+  }
+  int Number::getlower_limit(){
+    return lower_limit;
+  }
+  int Number::getupper_limit(){
+    return upper_limit;
+  }
+  void Number::addValue()
+  {
+    cout<<"podaj wartosc, która chcesz dodac: "; 
+    cin>>extra_value;
+    if(number + extra_value > upper_limit) throw "Value could exceed limit.\n";
+    number += extra_value;
+  }
+  void Number::substractValue()
+  {
+    cout<<"podaj wartosc, która chcesz odjac: "; 
+    cin>>extra_value;
+    if(number - extra_value < lower_limit) throw "Value could exceed limit.\n";
+    number -= extra_value;
+  }
+  
+int main() {
+
+  Number num;
+  try{
+    num.addValue();
+  }catch(const char *e){
+    cout<<e;
+  }
+  cout<<"wartość zmiennej \"numer\": "<<num.getnumber()<<endl;
+
+  try{
+    num.substractValue();
+  }catch(const char *f){
+    cout<<f;
+  }
+  cout<<"wartość zmiennej \"numer\": "<<num.getnumber()<<endl;
+  
+  return 0;
+}

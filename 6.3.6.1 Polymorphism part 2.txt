@@ -1,0 +1,127 @@
+
+Objectives
+
+Familiarize the student with:
+
+    polymorphism, or using objects of different types through a common interface;
+    using polymorphism in real programs.
+
+Scenario
+
+Let's assume you write a code for the game of checkers (aka draughts). There are two types of pieces in this game: men and kings. You need to implement classes (one abstract for the pieces and two separate classes for the men and the kings) to check if the moves are correct. Men can only move one field forward along diagonals. In international checkers, kings can move any distance forward and backward along unblocked diagonals. To simplify your program, assume that the board is empty and you only have to check one piece at a time. The starting position for one of the pieces is the b1 field. Call a check method from the pointer to the base (Piece) class.
+
+Call a method to check if Piece(Man) can be moved from b1 to c2
+Call a method to check if Piece(King) can be moved from b1 to d3
+Call a method to check if Piece(Man) can be moved from b1 to d3
+
+true
+true
+false
+================================================================================================
+
+#include <iostream>
+using namespace std;
+
+class Piece{
+public:
+  char x, x2;
+  int y, y2;
+  bool isPieceOnBoard(char x, int y, char x2, int y2)
+  {
+    if(((x>='a' && x<='h') && (y>=1 && y<=8)) && ((x>='a' && x<='h') && (y>=1 && y<=8)))
+      return true;
+    else return false;
+  }
+  virtual bool isMoveAllowed() = 0;
+};
+class Man: public Piece{
+public:
+  Man(char x, int y)
+  {
+    this->x=x;
+    this->y=y;
+  }
+  virtual bool isMoveAllowed()
+  {
+    cout<<"Rusz pionkiem: "; cin>>x2>>y2;
+    if(isPieceOnBoard(x, y, x2, y2))
+    {
+      if(x2==x+1 && (y2==y-1 || y2==y+1))
+      {
+        cout<<"Ruch na: "<<x2<<y2<<endl;
+        x=x2;
+        y=y2;
+        return true;
+      }
+      else
+      {
+        cout<<"Ruch niedozwolony!\n";
+        return false;
+      }
+    }
+    else
+    {
+      cout<<"Niepoprawne pole!\n";
+      return false;
+    }
+  }
+};
+class King: public Piece{
+public:
+  King(char x, int y)
+  {
+    this->x=x;
+    this->y=y;
+  }
+  virtual bool isMoveAllowed()
+  {
+    cout<<"Rusz pionkiem: "; cin>>x2>>y2;
+    if(isPieceOnBoard(x, y, x2, y2))
+    {
+      if(abs(x-x2)==abs(y-y2))
+      {
+        cout<<"Ruch na: "<<x2<<y2<<endl;
+        x=x2;
+        y=y2;
+        return true;
+      }
+      else
+      {
+        cout<<"Ruch niedozwolony!\n";
+        return false;
+      }
+    }
+    else
+    {
+      cout<<"Niepoprawne pole!\n";
+      return false;
+    }
+  }
+};
+void Move(Piece *piece)
+{
+  piece->isMoveAllowed();
+}
+int main() {
+ 
+  Man man('b',1);
+  King king('b',1);
+  Piece *piece;
+
+  for(int i=0; i<8; i++)
+  {
+    if(i%2==0)
+    {
+      piece=&man;
+      cout<<"pion\n";
+    }
+    else if(i%2==1)
+    {
+      piece=&king;
+      cout<<"król\n";
+    }
+    Move(piece);
+  }
+
+  return 0;
+}

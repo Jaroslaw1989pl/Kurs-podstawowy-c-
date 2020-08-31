@@ -1,0 +1,109 @@
+
+Objectives
+
+Familiarize the student with:
+
+    implementing multiple classes with the same interface;
+    polymorphism, or using objects of different types through a common interface.
+
+Scenario
+
+Write a hierarchy of two classes: base class IPAddress and derived class IPAddressChecked. The first class holds the value of an IP address and the derived class has one additional Boolean value (set to true if the IP is correct, otherwise set to false). Both classes have a constructor, a copy constructor and the print method. The print method in the derived class should also print the value of its Boolean (Correct/Not Correct). Use the methods of the base class in the derived one. Write some test code to get input from the user. Create one IPAddress object and two IPAddressChecked objects. Print the values for all three objects.
+
+1.2.3.4
+999.29.29.29
+199.29.29.29
+
+1.2.3.4
+999.29.29.29 - Not Correct
+199.29.29.29 - Correct
+=============================================================================================================
+
+#include <iostream>
+using namespace std;
+
+class IPAdress{
+public:
+  int a, b, c, d;
+  IPAdress();//konstruktor
+  IPAdress(const IPAdress &ip_a);//konstruktor kopiujacy
+  void Load();
+  void Print();
+};
+IPAdress::IPAdress()//konstruktor klasy IPAdress
+{
+  // cout<<"Podaj adres IP: \n";
+  // cin>>a>>b>>c>>d;
+}
+IPAdress::IPAdress(const IPAdress &ip_a)//konstruktor kopiowania klasy IPAdress
+{
+  a = ip_a.a;
+  b = ip_a.b;
+  c = ip_a.c;
+  d = ip_a.d;
+}
+void IPAdress::Load()
+{
+  cout<<"Podaj adres IP: \n";
+  cin>>a>>b>>c>>d;
+}
+void IPAdress::Print()
+{
+  cout<<a<<"."<<b<<"."<<c<<"."<<d<<endl;
+}
+
+class IPAdressChecked: public IPAdress{
+public:
+  IPAdressChecked();
+  void Load();
+  bool ipCheck(int a, int b, int c, int d);
+  void printIP();
+};
+IPAdressChecked::IPAdressChecked()
+{
+  // cout<<"Podaj adres IP: \n";
+  // cin>>a>>b>>c>>d;
+}
+void IPAdressChecked::Load()
+{
+  cout<<"Podaj adres IP: \n";
+  cin>>a>>b>>c>>d;
+}
+bool IPAdressChecked::ipCheck(int a, int b, int c, int d)
+{
+  if((a>0 && a<=255) && (b>=0 && b<=255) && (c>=0 && c<=255) 
+  && (b>=0 && b<=255))
+     return true; 
+  else 
+    return false;
+}
+void IPAdressChecked::printIP()
+{
+  cout<<a<<"."<<b<<"."<<c<<"."<<d;
+  if(ipCheck(a, b, c, d)) cout<<" - Correct\n";
+  else cout<<" - Not Correct\n";
+}
+
+int main() {
+  IPAdress ip;
+  IPAdressChecked ipc;
+  IPAdressChecked ipc2;
+
+  IPAdress *ip2 = &ipc; 
+  IPAdress *ip3 = &ipc2; 
+  
+  ip.Load();
+  ip2->Load();
+  ip3->Load();
+  
+  IPAdress ipp(*ip2); //konstruktor kopiujący
+
+  ip.Print();
+  ipc.printIP();
+  ipc2.printIP();
+
+  cout<<"konstruktor kopiujacy:"<<endl;
+  ipp.Print();
+
+  return 0;
+}

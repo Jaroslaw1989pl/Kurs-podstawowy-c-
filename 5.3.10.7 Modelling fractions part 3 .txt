@@ -1,0 +1,207 @@
+
+Objectives
+
+Familiarize the student with:
+
+    interactions between objects of the same type.
+
+Scenario
+
+Let's finish working on our fraction representations.
+
+As the last task, we'll add the ability to compare fractions.
+
+Your program should read two fractions and then print out the result of the comparison of those two fractions.
+
+When displaying fractions, they should now be reduced to their lowest terms, so "2/4" should be replaced with "1/2".
+
+Example input
+3 / 4
+1 / 3
+
+Example output
+3/4 > 1/3
+
+Example input
+7 / 4
+-6 / 10
+
+Example output
+1 3/4 > -6/10
+
+Example input
+7 / 4
+-6 / 10
+
+Example output
+1 3/4 > -6/10
+================================================================================
+
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <sstream>
+
+using namespace std;
+
+class Fraction{
+public:
+  Fraction(int numerator=1, int denominator=1);
+  string toString(int num, int den);
+  int setNum(string);
+  int setDen(string);
+  // the functions below do not change the object
+  // on which they are called, they produce a new object
+  bool isGreaterThan(Fraction fraction1, Fraction fraction2);
+  bool isLessThan(Fraction fraction1, Fraction fraction2);
+  bool isEqual(Fraction fraction1, Fraction fraction2);
+
+private:
+  int numerator, redNum;
+  int denominator, redDen;
+  void reduce(int num, int den);
+};
+// implement Fraction methods
+Fraction::Fraction(int num, int den)
+{
+  numerator=num;
+  denominator=den;
+}
+int Fraction::setNum(string inp)
+{
+  size_t s1 = inp.find(' ');
+  string n = inp.substr(0, s1);
+  return numerator = atoi(n.c_str());
+}
+
+int Fraction::setDen(string inp)
+{
+  size_t s2 = inp.rfind(' ');
+  string d = inp.substr(s2+1, inp.length());
+  return denominator = atoi(d.c_str()); 
+}
+
+string Fraction::toString(int num, int den)
+{
+  reduce(num, den);
+  int dec=redNum/redDen; //Zamiana jednostek na napis
+  stringstream ssd;
+  ssd<<dec;
+  string d;
+  ssd>>d;
+
+  int rem=redNum%redDen; //Zamiana licznika na napis
+  if((redNum<0 || redDen<0) && dec!=0)
+    rem=abs(rem);
+  else if(abs(redNum)<abs(redDen) && redDen<0)
+    rem=rem*-1;
+  stringstream ssr;
+  ssr<<rem;
+  string r;
+  ssr>>r;
+
+  redDen=abs(redDen);
+  stringstream ss3; ////Zamiana mianownika na napis
+  ss3<<redDen;
+  string de;
+  ss3>>de;
+
+  if((redNum>0 || redDen>0) && dec==0)
+    return r+"/"+de;
+
+  else if(redNum%redDen==0)
+    return d;
+
+  else
+    return d+" "+r+"/"+de;
+
+  return 0;
+}
+
+void Fraction::reduce(int num, int den)/////////Szukanie Największego Wspólnego Dzielnika
+{
+  int a=num;
+  int b=den;
+  int nwd;
+
+  while(b!=0)
+  {
+    nwd=a%b;
+    a=b;
+    b=nwd;
+  }
+  redNum=num/a;
+  redDen=den/a;
+  // return nwd=a;
+}
+bool Fraction::isGreaterThan(Fraction fraction1, Fraction fraction2)
+{
+  int num1=fraction1.numerator*fraction2.denominator;// 4/8
+  int den1=fraction1.denominator*fraction2.denominator;// 40/80
+
+  int num2=fraction2.numerator*fraction1.denominator;// 6/10
+  int den2=fraction2.denominator*fraction1.denominator;// 48/80
+   
+  if(den1==den2 && num1>num2)
+    return  true;
+  else if(num1==num2 && den1<den2)
+    return  true;
+  else return false;
+}
+bool Fraction::isEqual(Fraction fraction1, Fraction fraction2)
+{
+  fraction1.reduce(fraction1.numerator, fraction1.denominator);
+  fraction2.reduce(fraction2.numerator, fraction2.denominator);
+
+  if(fraction1.redDen==fraction2.redDen && fraction1.redNum==fraction2.redNum)
+    return true;
+  else
+    return false; 
+}
+bool Fraction::isLessThan(Fraction fraction1, Fraction fraction2)
+{
+  int num1=fraction1.numerator*fraction2.denominator;// 4/8
+  int den1=fraction1.denominator*fraction2.denominator;// 40/80
+
+  int num2=fraction2.numerator*fraction1.denominator;// 6/10
+  int den2=fraction2.denominator*fraction1.denominator;// 48/80
+   
+  if(den1==den2 && num1<num2)
+    return  true;
+  else if(num1==num2 && den1>den2)
+    return  true;
+  else return false;
+}
+
+int main(void)
+{
+  // int num, den;
+  string input = "";
+  string input2 = "";
+  
+  getline(cin, input);
+  Fraction fraction1;
+  fraction1.setNum(input);
+  fraction1.setDen(input);
+     
+  getline(cin, input2);
+  Fraction fraction2;
+  fraction2.setNum(input2);
+  fraction2.setDen(input2);
+ 
+  Fraction fraction;
+  if(fraction1.setDen(input)==0 || fraction2.setDen(input2)==0)
+  cout<<"Divifing by 0 is not allowed"<<endl;
+  else
+  {
+    if(fraction.isEqual(fraction1, fraction2)==true)
+    cout<<fraction1.toString(fraction1.setNum(input), fraction1.setDen(input))<<" = "<<fraction2.toString(fraction2.setNum(input2), fraction2.setDen(input2))<<endl;
+
+    else if(fraction.isGreaterThan(fraction1, fraction2)==true)
+    cout<<fraction1.toString(fraction1.setNum(input), fraction1.setDen(input))<<" > "<<fraction2.toString(fraction2.setNum(input2), fraction2.setDen(input2))<<endl;
+
+    else if(fraction.isLessThan(fraction1, fraction2)==true)
+    cout<<fraction1.toString(fraction1.setNum(input), fraction1.setDen(input))<<" < "<<fraction2.toString(fraction2.setNum(input2), fraction2.setDen(input2))<<endl;
+  }
+  return 0;
+}

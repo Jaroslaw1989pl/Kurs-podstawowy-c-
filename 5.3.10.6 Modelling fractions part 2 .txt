@@ -1,0 +1,230 @@
+
+Objectives
+
+Familiarize the student with:
+
+    interactions between objects of the same type;
+    providing meaningful and helpful representations of objects.
+
+Scenario
+
+Let's continue working on our fraction representations.
+
+Here's what we'll be working on in this lab:
+
+    the ability to add, subtract, multiply and divide fractions;
+    reducing fractions to their lowest terms.
+
+Your program should read two fractions, and then perform all the basic operations on that pair.
+
+When displaying fractions, they should now be reduced to their lowest terms, so "2/4" should be replaced with "1/2".
+
+To reduce the terms, it might be useful to first read about the Euclidean algorithm for finding the greatest common divisor.
+
+Example input
+3 / 4
+1 / 3
+
+Example output
+3/4 + 1/3 = 1 1/12
+3/4 - 1/3 = 5/12
+3/4 * 1/3 = 1/4
+3/4 / 1/3 = 2 1/4
+
+Example input
+7 / 4
+-6 / 10
+
+Example output
+1 3/4 + -6/10 = 1 3/20
+1 3/4 - -6/10 = 2 7/10
+1 3/4 * -6/10 = -1 1/20
+1 3/4 / -6/10 = 2 11/12
+==================================================================================
+
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include<sstream>
+
+using namespace std;
+
+class Fraction{
+public:
+  Fraction(int numerator=1, int denominator=1);
+  string toString(int num, int den);
+  double toDouble(int num, int den);
+  int setNum(string);
+  int setDen(string);
+  // the functions below do not change the object
+  // on which they are called, they produce a new object
+  string plus(Fraction fraction1, Fraction fraction2);
+  string minus(Fraction fraction1, Fraction fraction2);
+  string times(Fraction fraction1, Fraction fraction2);
+  string by(Fraction fraction1, Fraction fraction2);
+
+private:
+  int numerator, redNum;
+  int denominator, redDen;
+public:
+  int reduce(int num, int den);
+};
+// implement Fraction methods
+Fraction::Fraction(int num, int den)
+{
+  numerator=num;
+  denominator=den;
+}
+int Fraction::setNum(string inp)
+{
+  size_t s1 = inp.find(' ');
+  string n = inp.substr(0, s1);
+  return numerator = atoi(n.c_str());
+}
+
+int Fraction::setDen(string inp)
+{
+  size_t s2 = inp.rfind(' ');
+  string d = inp.substr(s2+1, inp.length());
+  return denominator = atoi(d.c_str());  
+}
+
+string Fraction::toString(int num, int den)
+{
+  int dec=num/den; //Zamiana jednostek na napis
+  stringstream ssd;
+  ssd<<dec;
+  string d;
+  ssd>>d;
+
+  int rem=num%den; //Zamiana licznika na napis
+  if((num<0 || den<0) && dec!=0)
+    rem=abs(rem);
+  else if(abs(num)<abs(den) && den<0)
+    rem=rem*-1;
+  stringstream ssr;
+  ssr<<rem;
+  string r;
+  ssr>>r;
+
+  den=abs(den);
+  stringstream ss3; ////Zamiana mianownika na napis
+  ss3<<den;
+  string de;
+  ss3>>de;
+
+  if((num>0 || den>0) && dec==0)
+    return r+"/"+de;
+
+  else if(num%den==0)
+    return d;
+
+  else
+    return d+" "+r+"/"+de;
+
+  return 0;
+}
+double Fraction::toDouble(int num, int den)
+{
+  double n=num;
+  double d=n/den;
+  cout<<showpoint;//wstawia przecinek do liczby całkowitej np. 8 to 8.00
+  cout.precision(3);
+  return d;
+}
+string Fraction::plus(Fraction fraction1, Fraction fraction2)
+{
+  int num = (fraction1.numerator * fraction2.denominator)+(fraction2.numerator * fraction1.denominator);
+  int den = fraction1.denominator * fraction2.denominator;
+ 
+  redNum=num/reduce(num, den);
+  redDen=den/reduce(num, den);
+  
+  return toString(redNum, redDen);
+}
+string Fraction::minus(Fraction fraction1, Fraction fraction2)
+{
+  int num = (fraction1.numerator * fraction2.denominator)-(fraction2.numerator * fraction1.denominator);
+  int den = fraction1.denominator * fraction2.denominator;
+ 
+  redNum=num/reduce(num, den);
+  redDen=den/reduce(num, den);
+  
+  return toString(redNum, redDen);
+}
+string Fraction::times(Fraction fraction1, Fraction fraction2)
+{
+  int num = fraction1.numerator * fraction2.numerator;
+  int den = fraction1.denominator * fraction2.denominator;
+ 
+  //Fraction::reduce(num, den);
+  redNum=num/reduce(num, den);
+  redDen=den/reduce(num, den);
+  // we could call result.reduce() here
+  // or use it just before it is necessary
+  return toString(redNum, redDen);
+// implement other Fraction methods
+}
+string Fraction::by(Fraction fraction1, Fraction fraction2)
+{
+  int num = fraction1.numerator * fraction2.denominator;
+  int den = fraction1.denominator * fraction2.numerator;
+ 
+  redNum=num/reduce(num, den);
+  redDen=den/reduce(num, den);
+  
+  return toString(redNum, redDen);
+}
+int Fraction::reduce(int num, int den)/////////Szukanie Największego Wspólnego Dzielnika
+{
+  int a=num;
+  int b=den;
+  int nwd;
+
+  while(b!=0)
+  {
+    nwd=a%b;
+    a=b;
+    b=nwd;
+  }
+  
+  return nwd=a;
+}
+
+int main(void)
+{
+  //int num, den;
+  string input = "";
+  string input2 = "";
+
+  
+  while(input!="quit" || input2!="quit")
+  {
+    getline(cin, input);
+    Fraction fraction1;
+    if(fraction1.setDen(input)==0)
+      cout<<"Dividing by 0 is not allowed"<<endl;
+    else
+    {     
+      getline(cin, input2);
+      Fraction fraction2;
+
+      if(fraction1.setDen(input)==0)
+      cout<<"Dividing by 0 is not allowed"<<endl;
+      else
+      {
+        Fraction fraction;
+        fraction.times(fraction1, fraction2);
+
+        cout<<fraction1.toString(fraction1.setNum(input), fraction1.setDen(input))<< " + "<<fraction2.toString(fraction2.setNum(input2), fraction2.setDen(input2))<<" = " <<fraction.plus(fraction1, fraction2)<<endl;
+
+        cout<<fraction1.toString(fraction1.setNum(input), fraction1.setDen(input))<< " - "<<fraction2.toString(fraction2.setNum(input2), fraction2.setDen(input2))<<" = " <<fraction.minus(fraction1, fraction2)<<endl;
+
+        cout<<fraction1.toString(fraction1.setNum(input), fraction1.setDen(input))<< " * "<<fraction2.toString(fraction2.setNum(input2), fraction2.setDen(input2))<<" = " <<fraction.times(fraction1, fraction2)<<endl;
+
+        cout<<fraction1.toString(fraction1.setNum(input), fraction1.setDen(input))<< " / "<<fraction2.toString(fraction2.setNum(input2), fraction2.setDen(input2))<<" = " <<fraction.by(fraction1, fraction2)<<endl;
+      }
+    }
+  }
+  return 0;
+}

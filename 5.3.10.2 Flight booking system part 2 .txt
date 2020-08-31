@@ -1,0 +1,153 @@
+
+Objectives
+
+Familiarize the student with:
+
+    modelling real-world entities with classes and objects;
+    limiting acceptable input range.
+
+Scenario
+
+Let's continue working on our booking system.
+
+You may remember in our last task that we had no limit on the number of reserved seats.
+
+Airlines often allow the overbooking of flights, expecting that some passengers will not make it.
+
+Modify the constructor so that it will not allow more than 105% reservation of the total capacity.
+
+Also for a negative number of reservations, set the number to 0.
+
+We might also want to be able to add new reservations or cancel them. Provide a way for the user to do this via a simple interface.
+
+    The command "add [n]" will try to add n reservations to the flight.
+    The command "cancel [n]" will try to cancel n reservations from the flight.
+    If an operation fails for any reason, the program will issue the message "Cannot perform this operation"
+    The command "quit" will stop execution of the program.
+
+Use the code from the previous lab as a starting point.
+
+User prompts were omitted in the output
+
+User prompts were omitted in the output
+
+Example input
+100
+50
+add 4
+cancel 200
+quit
+
+Example output
+Flight 1 : 50/100 (50%) seats reserved
+Flight 1 : 54/100 (54%) seats reserved
+Cannot perform this operation
+
+Example input
+180
+200
+add 1
+quit
+
+Example output
+Flight 1 : 189/180 (105%) seats reserved
+Cannot perform this operation
+===================================================================================
+
+#include <iostream>
+#include <iostream>
+using namespace std;
+
+class FlightBooking {
+public:
+  FlightBooking(int, int, int);
+  void printStatus();
+  bool reserveSeats(string command);
+  bool canceReservations(string command);
+private:
+  int id;
+  int capacity;
+  int reserved;
+};
+// ...
+FlightBooking::FlightBooking(int i, int cap, int res)
+{
+  // Save data to members according to limits
+  id=i;
+  capacity=cap;
+  reserved=res;
+}
+
+bool FlightBooking::reserveSeats(string command)
+{
+  // try to add reservations and return 'true' on success
+  // keep the limits in mind
+  command.erase(0, 4);
+  int add_seat = atoi(command.c_str());
+  reserved+=add_seat;
+  if((reserved*100)/capacity<=105)
+  {
+    printStatus();
+    return true;
+  }
+  else 
+  {
+    reserved=capacity*1.05;
+    cout<<"Cannot perform this operation"<<endl;
+    printStatus();
+    return false;
+  }
+}
+
+bool FlightBooking::canceReservations(string command)
+{
+  // try to cancel reservations and return 'true' on success
+  // keep the limits in mind
+  command.erase(0, 6);
+  int cancel_seat = atoi(command.c_str());
+  reserved-=cancel_seat;
+  if(reserved>=0)
+  {
+    printStatus();
+    return true;
+  }
+  else 
+  {
+    reserved=0;
+    cout<<"Cannot perform this operation"<<endl;
+    printStatus();
+    return false;
+  }
+}
+
+void FlightBooking::printStatus()
+{
+  cout<<"Flight "<<id<<": "<<reserved<<"/"<<capacity<<"("<<(reserved*100)/capacity<<"%) seats reserved"<<endl;
+}
+
+int main() {
+  int reserved = 0,
+      capacity = 0;
+  cout << "Provide flight capacity: "; cin >> capacity;
+
+  cout << "Provide number of reserved seats: "; cin >> reserved;
+
+  FlightBooking booking(1, capacity, reserved);
+
+  string command = "";
+  while (command != "quit")
+  {
+    cout << "What would you like to do?: "; getline(cin, command);    
+
+    // handle the command
+    size_t add=command.find("add");
+    if(add!=string::npos)
+      booking.reserveSeats(command);
+    size_t cancel=command.find("cancel");
+    if(cancel!=string::npos)
+      booking.canceReservations(command);
+    
+  }
+
+  return 0;
+}

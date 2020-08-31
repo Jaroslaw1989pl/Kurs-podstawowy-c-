@@ -1,0 +1,71 @@
+=================================================================================
+//Wyjątek ze zmienną int
+#include <iostream>
+
+using namespace std;
+
+int main(void) {
+
+	int a = 8, b = 0, c = 0;
+	cin >> b;
+	try {
+		//Your code here
+    if(b==0) throw -1;
+		c = a / b;
+	}
+	// Your code here
+  catch(int e)
+  {
+    cout<<"Error:"<<e<<endl;
+  }
+	cout << c << endl;
+	return 0;
+}
+
+=================================================================================
+
+//Wyjątek ze zmienną string
+#include <iostream>
+using namespace std;
+
+int main(void) {
+
+	int a = 8, b = 0, c = 0;
+	cin >> b;
+	try {
+		//Your code here
+    if(b==0) throw "Your input is not valid, you can't divide by zero.";
+		c = a / b;
+	}
+	// Your code here
+  catch(const char* e)
+  {
+    cout<<"Message:"<<e<<endl;
+  }
+	cout << c << endl;
+	return 0;
+}
+===================================================================================
+
+//Wyjątek ze zmienną dowolnego rodzaju
+#include <iostream>
+
+using namespace std;
+
+int main(void) {
+
+	int a = 8, b = 0, c = 0;
+	cin >> b;
+	try {
+		//Your code here
+    if(b==0) throw "Your input is not valid, you can't divide by zero.";
+		c = a / b;
+	}
+	// Your code here
+  catch(...)//przechwytywanie każdego rodzaju zmiennej
+  {
+    cout<<"Message:"<<endl;
+  }
+	cout << c << endl;
+	return 0;
+}

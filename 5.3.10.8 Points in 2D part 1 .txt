@@ -1,0 +1,106 @@
+
+Objectives
+
+Familiarize the student with:
+
+    modelling real-world entities with classes and objects;
+    interactions between objects of the same type.
+
+Scenario
+
+A point in two-dimensional space can be represented by two coordinates, usually denoted as x and y.
+
+The distance between two points in space can be calculated using the Pythagorean theorem.
+
+Your program should read two sets of x and y coordinates and calculate the distance between the two points the sets represent.
+
+Example input
+0 0
+3 4
+
+Example output
+5
+
+Example input
+9, 16
+4, 4
+
+Example output
+13
+
+Example input
+-3 -6.7
+-8.5 9
+
+Example output
+16.6355042
+==========================================================================================
+
+#include <iostream>
+#include <string>
+#include <math.h>
+
+using namespace std;
+
+class Point2D{
+public:
+  Point2D(double x=0, double y=0);
+  string toString();
+  double toDouble();
+  double setx(string);
+  double sety(string);
+  double distanceTo(Point2D p1, Point2D p2);
+private:
+  double x;
+  double y;
+};
+Point2D::Point2D(double xx, double yy)
+{
+  x=xx;
+  y=yy;
+}
+// implement Point2D methods
+double Point2D::setx(string inp)
+{
+  size_t s=inp.find(' ');
+  string n=inp.substr(0,s);
+  x=stod(n.c_str());//Zamiana string na double
+  
+  return x;
+}
+double Point2D::sety(string inp)
+{
+  size_t s=inp.rfind(' ');
+  string n=inp.substr(s+1,inp.length());
+  y=stod(n.c_str());//Zamiana string na double
+  
+  return y; 
+}
+double Point2D::distanceTo(Point2D p1, Point2D p2)
+{
+  double c;
+  c=sqrt(((p1.x-p2.x)*(p1.x-p2.x))+((p1.y-p2.y)*(p1.y-p2.y)));
+  
+  return c;
+}
+
+int main()
+{
+  string input;
+  string input2;
+
+  Point2D p1;
+  getline(cin, input);
+  p1.setx(input);
+  p1.sety(input);
+
+  Point2D p2;
+  getline(cin, input2);
+  p2.setx(input2);
+  p2.sety(input2);
+
+  Point2D p;
+  cout<<p.distanceTo(p1, p2);
+ 
+  return 0;
+}

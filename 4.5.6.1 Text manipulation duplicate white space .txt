@@ -1,0 +1,54 @@
+Objectives
+
+Familiarize the student with:
+
+    the basics of string and text manipulation.
+
+Scenario
+
+Write a program that will read a line of text and remove all duplicate whitespace.
+
+Note that any single whitespace characters must remain intact.
+
+Example input
+This is        a totally    normal    sentence.
+
+Example output
+This is a totally normal sentence.
+======================================================================================================
+
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+void del2spc(string &str)
+{
+  int dl_sent=str.length();
+  for(int i=0; i<dl_sent; i++)
+  {
+    size_t zdanie=str.find("  ");
+    if(zdanie!=string::npos)
+    {
+      str.erase(zdanie, 1);
+      //cout<<"usun"<<zdanie<<endl;     
+    }  
+  }
+  //cout<<str;
+}
+
+int main()
+{
+  string sentence;
+  getline(cin, sentence);
+ 
+   // manipulate the sentence here
+  size_t zdanie=sentence.find("  ");
+  if(zdanie!=string::npos)
+  {
+    del2spc(sentence);
+    cout<<sentence;   
+  }
+  else
+    cout << sentence << "\n";
+}

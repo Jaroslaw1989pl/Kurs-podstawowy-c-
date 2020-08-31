@@ -1,0 +1,118 @@
+Objectives
+
+Familiarize the student with:
+
+    throwing exceptions;
+    handling exceptions.
+
+Scenario
+
+Write a simple class for a matrix algebra with basic operations (methods in this class) which allow the programs to:
+
+    create a matrix object with specific dimensions;
+    fill the matrix with values;
+    add values to the matrix;
+    add a matrix to the matrix.
+
+When one of the matrix parameters is empty (also in the add a value method) or the added matrices don't fit one another, you must throw an exception. In the main function: create three testing matrices, two with the same size and one with another size. Try to compute the sum of all the matrix pairs, add some try-catch blocks and an appropriate message. Print the results on the screen. What other cases should be tested?
+
+2
+2
+2
+2
+3
+3
+
+0 0
+0 0
+
+Matrices don't fit.
+Matrices don't fit.
+
+===============================================================================================================
+
+#include <iostream>
+
+using namespace std;
+
+class Matrix{
+  int mat_columns;
+  int mat_rows;
+  int **matrix;
+  int mat_size;
+public:
+  Matrix(int mat_columns, int mat_rows);//konstruktor
+  void addValue();
+  void matricesSum(Matrix mat1, Matrix mat2);
+  void print();
+};
+//konstruktor
+Matrix::Matrix(int mat_rows, int mat_columns){
+  this->mat_columns = mat_columns;
+  this->mat_rows = mat_rows;
+  mat_size = mat_rows * mat_columns;
+
+  matrix = new int *[mat_rows];//tworzenie tablicy
+  for ( int i = 0; i < mat_rows; ++i )
+  {
+    matrix[i] = new int [mat_columns];
+  }
+}
+void Matrix::addValue()
+{
+  cout<<"Uzupełnij tablicę o rozmiarze "<<mat_rows<<"X"<<mat_columns<<endl;
+  for(int i=0; i<mat_rows; i++)
+  {
+    for(int j=0; j<mat_columns; j++)
+    {
+      cin>>matrix[i][j];
+    }    
+  }
+}
+void Matrix::matricesSum(Matrix mat1, Matrix mat2)
+{
+  if(mat1.mat_size!=mat2.mat_size) throw "Matrices don't fit.\n";
+  else
+  {
+    for(int i=0; i<mat_rows; i++)
+    {
+      for(int j=0; j<mat_columns; j++)
+      {
+        matrix[i][j] = mat1.matrix[i][j] + mat2.matrix[i][j];
+      }
+    }
+  }
+}
+void Matrix::print()
+{
+  cout<<"Podgląd tablicy:\n";
+  for(int i=0; i<mat_rows; i++)
+  {
+    for(int j=0; j<mat_columns; j++)
+    {
+      cout<<matrix[i][j];
+    }    
+    cout<<endl;
+  }
+  cout<<endl;
+}
+
+int main(void) {
+  Matrix mat1(2, 2);
+  mat1.addValue();
+  mat1.print();
+
+  Matrix mat2(2, 3);
+  mat2.addValue();
+  mat2.print();
+  try{
+    mat1.matricesSum(mat1, mat2);
+  }
+  catch(const char *error)
+  {
+    cout<<error<<endl;
+  }
+  mat1.print();
+	
+	return 0;
+}

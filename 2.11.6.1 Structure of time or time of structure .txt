@@ -1,0 +1,80 @@
+
+Objectives
+
+Familiarize the student with:
+
+    declaring structured data types;
+    declaring structured variables;
+    referring to a structure's fields.
+
+Scenario
+
+We've shown you how to declare structures intended to store information about dates. Now we encourage you to declare a structure for handling the time of day with an accuracy of one minute. We think your structure will have two fields, but we don't want to suggest anything more – all the design decisions are up to you.
+
+After you've done that, declare a variable of the previously declared structure type and write a code asking your user for two values: hours and minutes. Note: you should use a 24-hour clock, sometimes referred to as "military time".
+
+Check the inputted values carefully – don't accept ideas like 25:71; store the values in your structure variable.
+
+Next, input an int value and assume that this is a number of minutes – let it be the duration of some event.
+
+Your task is to output a time of day (hours and minutes respectively) that will be shown on clocks immediately after our event; try to show it in the form "HH:MM".
+
+Test your code using the data we've provided.
+
+Example input
+11 58 23
+
+Example output
+12:21
+
+Example input
+23 55 1880
+
+Example output
+7:15
+
+Example input
+23 55 1441
+
+Example output
+23:56
+
+Example input
+7 45 510
+
+Example output
+16:15
+=========================================================================================
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+  int h, g, m, m2, d;
+  struct time {
+  int godz;
+  int min;
+  }czas;
+
+  cout<<"Podaj godzinę rozpoczecia (0-23): "; cin>>czas.godz;
+  if(0<=czas.godz && czas.godz<=23)
+    {
+    cout<<"Podaj minutę rozpoczecia (0-59): "; cin>>czas.min;
+      if(0<=czas.min && czas.min<=59)
+      {
+        cout<<"Podaj czas trwania: "; cin>>d;
+      }
+    }
+  m=czas.min+d;
+  m2=m%60; 
+
+  h=d/60;
+  g=(czas.godz+h+1)%24;
+  if(czas.min+(m2-czas.min)<60 && m2>30)
+  {
+    g=(czas.godz+h)%24;
+  }
+cout<<g<<":"<<m2;
+  return 0;
+}
